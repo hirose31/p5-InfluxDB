@@ -1,0 +1,11 @@
+Revision history for InfluxDB
+
+{{$NEXT}}
+    [NEW FEATURES]
+    [IMPROVEMENTS]
+    [INCOMPATIBLE CHANGES]
+    [BUG FIXES]
+    [DOCUMENTATION]
+    [SECURITY]
+        - Initial version
+
