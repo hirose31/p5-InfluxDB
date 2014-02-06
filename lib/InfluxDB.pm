@@ -214,7 +214,8 @@ sub query {
     my($self, $args) = Data::Validator->new(
         q              => { isa => 'Str' },
         time_precision => { isa => 'TimePrecision', optional => 1 },
-        chunked        => { isa => 'Bool', default => 0 }
+        chunked        => { isa => 'Bool', default => 0 },
+        # order          => { isa => 'Str', optional => 1 }, # not implemented?
     )->with('Method')->validate(@_);
 
     my $url = $self->_build_url(
@@ -223,6 +224,7 @@ sub query {
             q              => $args->{q},
             time_precision => (exists $args->{time_precision} ? $args->{time_precision} :  undef),
             chunked        => ($args->{chunked} ? 'true' : 'false'),
+            order          => (exists $args->{order} ? $args->{order} :  undef),
         },
     );
 
