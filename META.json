@@ -1,5 +1,5 @@
 {
-   "abstract" : "fixme",
+   "abstract" : "Client library for InfluxDB",
    "author" : [
       "HIROSE Masaaki <hirose31@gmail.com>"
    ],
@@ -26,22 +26,32 @@
    "prereqs" : {
       "configure" : {
          "requires" : {
-            "Module::Build::Tiny" : "0.030"
+            "Module::Build::Tiny" : "0.030",
+            "perl" : "5.008005"
          }
       },
       "runtime" : {
          "requires" : {
-            "perl" : "5.008005"
+            "Class::Accessor::Lite" : "0",
+            "Data::Validator" : "0",
+            "Furl" : "0",
+            "JSON" : "2",
+            "Mouse::Util::TypeConstraints" : "0",
+            "URI::Escape" : "0",
+            "perl" : "5.008_005"
          }
       },
       "test" : {
          "requires" : {
-            "Devel::Cover" : "0",
-            "Test::More" : "0.88"
+            "Pod::Wordlist" : "0",
+            "Test::Fixme" : "0",
+            "Test::Kwalitee" : "0",
+            "Test::More" : "0",
+            "Test::Spelling" : "0.12"
          }
       }
    },
-   "release_status" : "testing",
-   "version" : "0.01_01"
+   "release_status" : "stable",
+   "version" : "0.001"
 }
 

@@ -22,5 +22,10 @@ HIROSE
 Masaaki
 hirose31
 lib
-Foo
-Bar
+Chunked
+InfluxDB
+STDERR
+Str
+chunked
+hostname
+username

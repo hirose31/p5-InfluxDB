@@ -1,9 +1,9 @@
-<a href="https://travis-ci.org/hirose31/InfluxDB"><img src="https://travis-ci.org/hirose31/InfluxDB.png?branch=master" alt="Build Status" /></a>
-<a href="https://coveralls.io/r/hirose31/InfluxDB?branch=master"><img src="https://coveralls.io/repos/hirose31/InfluxDB/badge.png?branch=master" alt="Coverage Status" /></a>
+<a href="https://travis-ci.org/hirose31/p5-InfluxDB"><img src="https://travis-ci.org/hirose31/p5-InfluxDB.png?branch=master" alt="Build Status" /></a>
+<a href="https://coveralls.io/r/hirose31/p5-InfluxDB?branch=master"><img src="https://coveralls.io/repos/hirose31/p5-InfluxDB/badge.png?branch=master" alt="Coverage Status" /></a>
 
 # NAME
 
-InfluxDB - fixme
+InfluxDB - Client library for InfluxDB
 
 # INSTALLATION
 
@@ -17,29 +17,192 @@ To install this module, run the following commands:
 # SYNOPSIS
 
     use InfluxDB;
-    fixme
+    
+    my $ix = InfluxDB->new(
+        host     => '127.0.0.1',
+        port     => 8086,
+        username => 'scott',
+        password => 'tiger',
+        database => 'test',
+    );
+    
+    $ix->write_points(
+        data => {
+            name    => "cpu",
+            columns => [qw(sys user idle)],
+            points  => [
+                [20, 50, 30],
+                [30, 60, 10],
+            ],
+        },
+    ) or die "write_points: " . $ix->status->{status_line};
+    
+    my $rs = $ix->query(
+        q => 'select * from cpu',
+        time_precision => 's',
+    ) or die "query: " . $ix->status->{status_line};
+    
+    for my $r (@{ $rs }) {
+        for my $c (@{ $r->{columns} }) {
+            $c = 'seqnum' if $c eq 'sequence_number';
+            printf "%12s", $c;
+        }
+        print "\n";
+    
+        for my $p (@{ $r->{points} }) {
+            for my $v (@$p) {
+                printf "%12s", $v;
+            }
+            print "\n";
+        }
+    }
+
+
+
+output:
+
+            time      seqnum        idle         sys        user
+      1391666533     3960001          10          30          60
+      1391666533     3950001          30          20          50
 
 # DESCRIPTION
 
-InfluxDB is fixme
+InfluxDB is a client library for InfluxDB <[http://influxdb.org](http://influxdb.org)>.
+
+    **************************** CAUTION ****************************
+    
+    InfluxDB that is a time series database is still in development
+    status, so this module is also alpha state. Any API will change
+    without notice.
+    
+    *****************************************************************
 
 # METHODS
 
-- __method\_name__($message:Str)
+## Class Methods
 
-    fixme
+### __new__(%args:Hash) :InfluxDB
+
+Creates and returns a new InfluxDB client instance. Dies on errors.
+
+%args is following:
+
+- host => Str
+- port => Int (default: 8086)
+- username => Str
+- password => Str
+- database => Str
+- timeout => Int (default: 120)
+- debug => Bool (optional)
+
+## Instance Methods
+
+### __write\_points__(%args:Hash) :Bool
+
+Write to multiple time series names.
+
+- data => ArrayRef\[HashRef\] | HashRef
+
+    HashRef like following:
+
+        {
+            name    => "name_of_series",
+            columns => ["col1", "col2", ...],
+            points  => [
+                [10.0, 20.0, ...],
+                [10.9, 21.3, ...],
+                ...
+            ],
+        }
+
+- time\_precision => "s" | "m" | "u" (optional)
+
+    The precision timestamps should come back in. Valid options are s for seconds, m for milliseconds, and u for microseconds.
+
+- __delete\_points__() :Bool
+
+### __query__(%args:Hash) :Bool
+- q => Str
+
+    The InfluxDB query language, see: [http://influxdb.org/docs/query_language/](http://influxdb.org/docs/query_language/)
+
+- time\_precision => "s" | "m" | "u" (optional)
+
+    The precision timestamps should come back in. Valid options are s for seconds, m for milliseconds, and u for microseconds.
+
+- chunked => Bool (default: 0)
+
+    Chunked response.
+
+### __switch\_database__(database => Str) :Bool
+
+Switch to another database.
+
+### __switch\_user__(username => Str, password => Str) :Bool
+
+Change your user-context.
+
+### __create\_database__(database => Str) :Bool
+
+Create database. Requires cluster-admin privileges.
+
+### __list\_database__() :ArrayRef\[HashRef\]
+
+List database. Requires cluster-admin privileges.
+
+    [
+      {
+        name => "databasename",
+        replicationFactor => 1
+      },
+      ...
+    ]
+
+### __delete\_database__(database => Str) :Bool
+
+Delete database. Requires cluster-admin privileges.
+
+### __status__() :HashRef
+
+Returns status of previous request, as following hash:
+
+- code => Int
+
+    HTTP status code.
+
+- message => Str
+
+    HTTP status message.
+
+- status\_line => Str
+
+    HTTP status line (code . " " . message).
+
+- content => Str
+
+    Response body.
+
+### __host__() :Str
+
+Returns hostname of InfluxDB server.
+
+### __port__() :Str
+
+Returns port number of InfluxDB server.
+
+### __username__() :Str
+
+Returns current user name.
+
+### __database__() :Str
+
+Returns current database name.
 
 # ENVIRONMENT VARIABLES
 
-- HOME
+- IX\_DEBUG
 
-    Used to determine the user's home directory.
-
-# FILES
-
-- `/path/to/config.ph`
-
-    設定ファイル。
+    Print debug messages to STDERR.
 
 # AUTHOR
 
@@ -47,16 +210,15 @@ HIROSE Masaaki <hirose31@gmail.com>
 
 # REPOSITORY
 
-[https://github.com/hirose31/InfluxDB](https://github.com/hirose31/InfluxDB)
+[https://github.com/hirose31/p5-InfluxDB](https://github.com/hirose31/p5-InfluxDB)
 
-    git clone git://github.com/hirose31/InfluxDB.git
+    git clone https://github.com/hirose31/p5-InfluxDB.git
 
 patches and collaborators are welcome.
 
 # SEE ALSO
 
-[Module::Hoge](https://metacpan.org/pod/Module::Hoge),
-ls(1), cd(1)
+[http://influxdb.org](http://influxdb.org)
 
 # COPYRIGHT
 

@@ -116,8 +116,7 @@ sub create_database {
 }
 
 sub list_database {
-    my($self, $args) = Data::Validator->new(
-    )->with('Method')->validate(@_);
+    my $self = shift;
 
     my $url = $self->_build_url(
         path => '/db',
