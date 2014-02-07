@@ -5,6 +5,7 @@
 MYMETA.*
 !META.json
 /.prove
+/blib
 
 /carton.lock
 /.carton/
