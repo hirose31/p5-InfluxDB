@@ -20,5 +20,4 @@ on test => sub {
     requires 'Test::Kwalitee';
     requires 'Test::More';
     requires 'Test::Spelling', '0.12';
-    requires 'List::MoreUtils';
 };

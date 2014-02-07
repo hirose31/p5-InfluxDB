@@ -10,7 +10,6 @@ our @EXPORT = qw(
             );
 
 use Data::Dumper;
-use List::MoreUtils qw(zip);
 
 sub p($) {
     local $Data::Dumper::Indent    = 1;
@@ -56,7 +55,8 @@ sub reorder_points {
     $points = [ reverse @{ $points } ];
 
     for my $p (@{ $points }) {
-        my %tmp = zip @{$result->[0]{columns}}, @{$p};
+        my %tmp;
+        @tmp{ @{$result->[0]{columns}} } = @{$p};
         delete @tmp{qw(time sequence_number)};
         $p = [];
         for my $c (@{ $args{order} }) {
