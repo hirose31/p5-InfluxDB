@@ -75,6 +75,24 @@ sub status {
     return $self->{status};
 }
 
+sub as_hash {
+    my(undef, $result) = @_;
+    my $h;
+
+    for my $r (@{ $result }) {
+        my $series  = $r->{name};
+        my @columns = @{ $r->{columns} };
+
+        for my $p (@{ $r->{points} }) {
+            my %ph;
+            @ph{ @columns } = @$p;
+            push @{ $h->{$series} }, \%ph;
+        }
+    }
+
+    return $h;
+}
+
 sub switch_database {
     my($self, $args) = Data::Validator->new(
         database => { isa => 'Str' },
@@ -348,27 +366,38 @@ To install this module, run the following commands:
         time_precision => 's',
     ) or die "query: " . $ix->status->{status_line};
     
-    for my $r (@{ $rs }) {
-        for my $c (@{ $r->{columns} }) {
-            $c = 'seqnum' if $c eq 'sequence_number';
-            printf "%12s", $c;
-        }
-        print "\n";
+    # $rs is ArrayRef[HashRef]:
+    # [
+    #   {
+    #     columns => ["time","sequence_number","idle","sys","user"],
+    #     name => "cpu",
+    #     points => [
+    #       ["1391743908",6500001,10,30,60],
+    #       ["1391743908",6490001,30,20,50],
+    #     ],
+    #   },
+    # ]
     
-        for my $p (@{ $r->{points} }) {
-            for my $v (@$p) {
-                printf "%12s", $v;
-            }
-            print "\n";
-        }
-    }
-
-
-output:
-
-            time      seqnum        idle         sys        user
-      1391666533     3960001          10          30          60
-      1391666533     3950001          30          20          50
+    my $hrs = $ix->as_hash($rs); # or InfluxDB->as_hash($rs);
+    # convert into HashRef for convenience
+    # {
+    #   cpu => [
+    #     {
+    #       idle   => 10,
+    #       seqnum => 6500001,
+    #       sys    => 30,
+    #       time   => "1391743908",
+    #       user   => 60
+    #     },
+    #     {
+    #       idle   => 30,
+    #       seqnum => 6490001,
+    #       sys    => 20,
+    #       time   => "1391743908",
+    #       user   => 50
+    #     }
+    #   ]
+    # }
 
 =head1 DESCRIPTION
 
@@ -461,6 +490,31 @@ The precision timestamps should come back in. Valid options are s for seconds, m
 Chunked response.
 
 =back
+
+=head3 B<as_hash>($result:ArrayRef[HashRef]) :HashRef
+
+Utility instance/class method for handling result of query.
+
+Takes result of C<query()>(ArrayRef) and convert into following HashRef.
+
+    {
+      cpu => [
+        {
+          idle => 10,
+          seqnum => 6500001,
+          sys => 30,
+          time => "1391743908",
+          user => 60
+        },
+        {
+          idle => 30,
+          seqnum => 6490001,
+          sys => 20,
+          time => "1391743908",
+          user => 50
+        }
+      ]
+    }
 
 =head3 B<switch_database>(database => Str) :Bool
 
