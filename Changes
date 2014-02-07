@@ -1,11 +1,7 @@
 Revision history for InfluxDB
 
 {{$NEXT}}
-    [NEW FEATURES]
-    [IMPROVEMENTS]
-    [INCOMPATIBLE CHANGES]
-    [BUG FIXES]
-    [DOCUMENTATION]
-    [SECURITY]
-        - Initial version
 
+0.001  2014-02-07 17:02:13 JST
+    [NEW FEATURES]
+        - Initial version
