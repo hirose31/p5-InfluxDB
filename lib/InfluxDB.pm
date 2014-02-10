@@ -75,6 +75,20 @@ sub status {
     return $self->{status};
 }
 
+sub errstr {
+    my($self) = @_;
+    my $errstr = "";
+
+    if (substr($self->{status}{code}, 0, 2) ne "20") {
+        $errstr = join("\n",
+                       $self->{status}{status_line},
+                       $self->{status}{content},
+                   );
+    }
+
+    return $errstr;
+}
+
 sub as_hash {
     my(undef, $result) = @_;
     my $h;
@@ -359,12 +373,12 @@ To install this module, run the following commands:
                 [30, 60, 10],
             ],
         },
-    ) or die "write_points: " . $ix->status->{status_line};
+    ) or die "write_points: " . $ix->errstr;
     
     my $rs = $ix->query(
         q => 'select * from cpu',
         time_precision => 's',
-    ) or die "query: " . $ix->status->{status_line};
+    ) or die "query: " . $ix->errstr};
     
     # $rs is ArrayRef[HashRef]:
     # [
@@ -567,6 +581,10 @@ HTTP status line (code . " " . message).
 Response body.
 
 =back
+
+=head3 B<errstr>() :Str
+
+Returns error message if previous query was failed.
 
 =head3 B<host>() :Str
 
