@@ -35,12 +35,12 @@ To install this module, run the following commands:
                 [30, 60, 10],
             ],
         },
-    ) or die "write_points: " . $ix->status->{status_line};
+    ) or die "write_points: " . $ix->errstr;
     
     my $rs = $ix->query(
         q => 'select * from cpu',
         time_precision => 's',
-    ) or die "query: " . $ix->status->{status_line};
+    ) or die "query: " . $ix->errstr};
     
     # $rs is ArrayRef[HashRef]:
     # [
@@ -216,6 +216,10 @@ Returns status of previous request, as following hash:
 - content => Str
 
     Response body.
+
+### __errstr__() :Str
+
+Returns error message if previous query was failed.
 
 ### __host__() :Str
 

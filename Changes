@@ -2,6 +2,12 @@ Revision history for InfluxDB
 
 {{$NEXT}}
 
+0.002  2014-02-10 14:40:32 JST
+    [NEW FEATURES]
+        - Add "errstr" method
+    [BUG FIXES]
+        - run t/author-10_basic.t test only under author test mode
+
 0.001  2014-02-07 17:02:13 JST
     [NEW FEATURES]
         - Initial version
