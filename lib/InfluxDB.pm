@@ -276,6 +276,29 @@ sub query {
     }
 }
 
+### Continuous Queries ###################################################
+sub create_continuous_query {
+    my($self, $args) = Data::Validator->new(
+        q    => { isa => 'Str' },
+        name => { isa => 'Str' },
+    )->with('Method')->validate(@_);
+
+    return $self->query(q => "$args->{q} into $args->{name}");
+}
+
+sub list_continuous_queries {
+    my $self = shift;
+    return $self->query(q => "list continuous queries");
+}
+
+sub drop_continuous_query {
+    my($self, $args) = Data::Validator->new(
+        id => { isa => 'Str' },
+    )->with('Method')->validate(@_);
+
+    return $self->query(q => "drop continuous query $args->{id}");
+}
+
 ### user #################################################################
 # fixme TODO
 # get_list_cluster_admins
