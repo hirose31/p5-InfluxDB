@@ -20,6 +20,12 @@ use JSON 2;
 
 enum 'TimePrecision' => qw(s m u);
 
+subtype 'JSONBool' => as 'ScalarRef';
+coerce 'JSONBool'
+    => from 'Bool' => via { $_ ? \1 : \0 }
+    => from 'Object' => via { JSON::is_bool($_) ? ($_ == 1 ? \1 : \0) : \0 }
+;
+
 sub new {
     state $rule = Data::Validator->new(
         host     => { isa => 'Str' },
@@ -318,6 +324,7 @@ sub drop_continuous_query {
 # add_cluster_admin
 # update_cluster_admin_password
 # delete_cluster_admin
+
 # set_database_admin
 # unset_database_admin
 # alter_database_admin
@@ -325,11 +332,92 @@ sub drop_continuous_query {
 # add_database_admin
 # update_database_admin_password
 # delete_database_admin
-# get_database_users
-# add_database_user
-# update_database_user_password
-# delete_database_user
-# update_permission
+
+sub create_database_user {
+    state $rule = Data::Validator->new(
+        name     => { isa => 'Str' },
+        password => { isa => 'Str' },
+    )->with('Method');
+    my($self, $args) = $rule->validate(@_);
+
+    my $url = $self->_build_url(
+        path => '/db/' . $self->database . '/users',
+    );
+
+    my $res = $self->{ua}->post($url, [], $self->json->encode({
+        name     => $args->{name},
+        password => $args->{password},
+    }));
+    $self->status($res);
+
+    return $res->is_success ? 1 : ();
+}
+
+sub delete_database_user {
+    state $rule = Data::Validator->new(
+        name => { isa => 'Str' },
+    )->with('Method');
+    my($self, $args) = $rule->validate(@_);
+
+    my $url = $self->_build_url(
+        path => '/db/' . $self->database . '/users/' . $args->{name},
+    );
+
+    my $res = $self->{ua}->delete($url);
+    $self->status($res);
+
+    return $res->is_success ? 1 : ();
+}
+
+sub update_database_user {
+    state $rule = Data::Validator->new(
+        name     => { isa => 'Str' },
+        password => { isa => 'Str', optional => 1 },
+        admin    => { isa => 'JSONBool', optional => 1 },
+    )->with('Method');
+    my($self, $args) = $rule->validate(@_);
+
+    my $url = $self->_build_url(
+        path => '/db/' . $self->database . '/users/' . $args->{name},
+    );
+
+    my $res = $self->{ua}->post($url, [], $self->json->encode({
+        exists $args->{password} ? (password => $args->{password}) : (),
+        exists $args->{admin} ? (admin => $args->{admin}) : (),
+    }));
+    $self->status($res);
+
+    return $res->is_success ? 1 : ();
+}
+
+sub list_database_users {
+    my $self = shift;
+
+    my $url = $self->_build_url(
+        path => '/db/' . $self->database . '/users',
+    );
+
+    my $res = $self->{ua}->get($url);
+    $self->status($res);
+
+    return $res->is_success ? $self->json->decode($res->content) : ();
+}
+
+sub show_database_user {
+    state $rule = Data::Validator->new(
+        name => { isa => 'Str' },
+    )->with('Method');
+    my($self, $args) = $rule->validate(@_);
+
+    my $url = $self->_build_url(
+        path => '/db/' . $self->database . '/users/' . $args->{name},
+    );
+
+    my $res = $self->{ua}->get($url);
+    $self->status($res);
+
+    return $res->is_success ? $self->json->decode($res->content) : ();
+}
 
 ### utils ################################################################
 sub _build_url {
