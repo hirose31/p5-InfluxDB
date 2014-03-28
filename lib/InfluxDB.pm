@@ -224,21 +224,21 @@ sub delete_points {
 }
 
 sub create_scheduled_deletes {
-    croak "Not implemented in InfluxDB v0.4.3";
+    croak "Not implemented in InfluxDB v0.5.1";
     # state $rule = Data::Validator->new(
     # )->with('Method');
     # my($self, $args) = $rule->validate(@_);
 }
 
 sub list_scheduled_deletes {
-    croak "Not implemented in InfluxDB v0.4.3";
+    croak "Not implemented in InfluxDB v0.5.1";
     # state $rule = Data::Validator->new(
     # )->with('Method');
     # my($self, $args) = $rule->validate(@_);
 }
 
 sub delete_scheduled_deletes {
-    croak "Not implemented in InfluxDB v0.4.3";
+    croak "Not implemented in InfluxDB v0.5.1";
     # state $rule = Data::Validator->new(
     # )->with('Method');
     # my($self, $args) = $rule->validate(@_);
