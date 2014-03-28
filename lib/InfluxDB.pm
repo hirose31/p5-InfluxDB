@@ -202,14 +202,7 @@ sub write_points {
 sub delete_points {
     my($self, $args) = Data::Validator->new(
         name  => { isa => 'Str' },
-        regex => { isa => 'Str', optional => 1 },
-        start => { isa => 'Int', optional => 1 },
-        end   => { isa => 'Int', optional => 1 },
-        i_know_what_i_do => { isa => 'Bool', default => 0 },
     )->with('Method')->validate(@_);
-
-    croak "Disable this method because it seems that handling some parameters(start, end, regex) has not been implemented in InfluxDB v0.4.3, so delete ALL points. It's dangerous."
-        unless $args->{i_know_what_i_do};
 
     my $url = $self->_build_url(
        path =>  '/db/' . $self->database . '/series/' . $args->{name},

@@ -42,7 +42,7 @@ subtest 'database create' => sub {
 };
 
 subtest 'points write, query, delete' => sub {
-    ok($ix->delete_points(name => "s1", i_know_what_i_do => 1));
+    ok($ix->delete_points(name => "s1"));
 
     my $data = {
         name    => "s1",
