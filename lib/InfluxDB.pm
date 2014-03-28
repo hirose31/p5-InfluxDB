@@ -700,6 +700,26 @@ List series in current database
 
 =end comment
 
+=head3 B<create_database_user>(name => Str, password => Str) :Bool
+
+Create a database user on current database.
+
+=head3 B<delete_database_user>(name => Str) :Bool
+
+Delete a database user on current database.
+
+=head3 B<update_database_user>(name => Str [,password => Str] [,admin => Bool]) :Bool
+
+Update a database user on current database.
+
+=head3 B<list_database_user>() :ArrayRef
+
+List all database users on current database.
+
+=head3 B<show_database_user>(name => Str) :HashRef
+
+Show a database user on current database.
+
 =head3 B<status>() :HashRef
 
 Returns status of previous request, as following hash:
