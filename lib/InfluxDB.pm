@@ -179,6 +179,14 @@ sub delete_database {
     return $res->is_success ? 1 : ();
 }
 
+### series ###############################################################
+## hmmm v0.5.1 (latest version) returns empty response
+## https://github.com/FGRibreau/influxdb-cli/issues/8
+# sub list_series {
+#     my $self = shift;
+#     return $self->query(q => "list series");
+# }
+
 ### points ###############################################################
 sub write_points {
     state $rule = Data::Validator->new(
