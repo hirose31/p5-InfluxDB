@@ -78,6 +78,40 @@ subtest 'dataabse user' => sub {
     };
 };
 
+subtest 'cluster admin' => sub {
+    my $name = 'cadmin';
+    my $password = 'pa55w0rd';
+
+    my $n_cluster_admins;
+
+    subtest 'create' => sub {
+        $r = $ix->list_cluster_admins;
+        $n_cluster_admins = scalar(@$r);
+
+        ok($ix->create_cluster_admin(name => $name, password => $password));
+
+        $r = $ix->list_cluster_admins;
+        is(scalar(@$r), $n_cluster_admins+1);
+    };
+
+    subtest 'update' => sub {
+        # ok($r = $ix->show_cluster_admin(name => $name));
+        # is($r->{name}, $name);
+
+        ok($ix->update_cluster_admin(name => $name, password => "blah"));
+    };
+
+    subtest 'delete' => sub {
+        $r = $ix->list_cluster_admins;
+        is(scalar(@$r), $n_cluster_admins+1);
+
+        ok($ix->delete_cluster_admin(name => $name));
+
+        $r = $ix->list_cluster_admins;
+        is(scalar(@$r), $n_cluster_admins);
+    };
+};
+
 subtest 'database delete' => sub {
     ok($ix->switch_user(%t::Util::Admin_User));
     ok($ix->delete_database(database => $database));

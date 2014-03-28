@@ -319,20 +319,6 @@ sub drop_continuous_query {
 }
 
 ### user #################################################################
-# fixme TODO
-# get_list_cluster_admins
-# add_cluster_admin
-# update_cluster_admin_password
-# delete_cluster_admin
-
-# set_database_admin
-# unset_database_admin
-# alter_database_admin
-# get_list_database_admins
-# add_database_admin
-# update_database_admin_password
-# delete_database_admin
-
 sub create_database_user {
     state $rule = Data::Validator->new(
         name     => { isa => 'Str' },
@@ -418,6 +404,90 @@ sub show_database_user {
 
     return $res->is_success ? $self->json->decode($res->content) : ();
 }
+
+sub create_cluster_admin {
+    state $rule = Data::Validator->new(
+        name     => { isa => 'Str' },
+        password => { isa => 'Str' },
+    )->with('Method');
+    my($self, $args) = $rule->validate(@_);
+
+    my $url = $self->_build_url(
+        path => '/cluster_admins',
+    );
+
+    my $res = $self->{ua}->post($url, [], $self->json->encode({
+        name     => $args->{name},
+        password => $args->{password},
+    }));
+    $self->status($res);
+
+    return $res->is_success ? 1 : ();
+}
+
+sub delete_cluster_admin {
+    state $rule = Data::Validator->new(
+        name => { isa => 'Str' },
+    )->with('Method');
+    my($self, $args) = $rule->validate(@_);
+
+    my $url = $self->_build_url(
+        path => '/cluster_admins/' . $args->{name},
+    );
+
+    my $res = $self->{ua}->delete($url);
+    $self->status($res);
+
+    return $res->is_success ? 1 : ();
+}
+
+sub update_cluster_admin {
+    state $rule = Data::Validator->new(
+        name     => { isa => 'Str' },
+        password => { isa => 'Str' },
+    )->with('Method');
+    my($self, $args) = $rule->validate(@_);
+
+    my $url = $self->_build_url(
+        path => '/cluster_admins/' . $args->{name},
+    );
+
+    my $res = $self->{ua}->post($url, [], $self->json->encode({
+        exists $args->{password} ? (password => $args->{password}) : (),
+    }));
+    $self->status($res);
+
+    return $res->is_success ? 1 : ();
+}
+
+sub list_cluster_admins {
+    my $self = shift;
+
+    my $url = $self->_build_url(
+        path => '/cluster_admins',
+    );
+
+    my $res = $self->{ua}->get($url);
+    $self->status($res);
+
+    return $res->is_success ? $self->json->decode($res->content) : ();
+}
+
+# sub show_cluster_admin {
+#     state $rule = Data::Validator->new(
+#         name => { isa => 'Str' },
+#     )->with('Method');
+#     my($self, $args) = $rule->validate(@_);
+
+#     my $url = $self->_build_url(
+#         path => '/cluster_admins/' . $args->{name},
+#     );
+
+#     my $res = $self->{ua}->get($url);
+#     $self->status($res);
+
+#     return $res->is_success ? $self->json->decode($res->content) : ();
+# }
 
 ### utils ################################################################
 sub _build_url {
@@ -708,13 +778,37 @@ Delete a database user on current database.
 
 Update a database user on current database.
 
-=head3 B<list_database_user>() :ArrayRef
+=head3 B<list_database_users>() :ArrayRef
 
 List all database users on current database.
 
 =head3 B<show_database_user>(name => Str) :HashRef
 
 Show a database user on current database.
+
+=head3 B<create_cluster_admin>(name => Str, password => Str) :Bool
+
+Create a database user on current database.
+
+=head3 B<delete_cluster_admin>(name => Str) :Bool
+
+Delete a database user on current database.
+
+=head3 B<update_cluster_admin>(name => Str, password => Str) :Bool
+
+Update a database user on current database.
+
+=head3 B<list_cluster_admins>() :ArrayRef
+
+List all database users on current database.
+
+=begin comment
+
+=head3 B<show_cluster_admin>(name => Str) :HashRef
+
+Show a database user on current database.
+
+=end comment
 
 =head3 B<status>() :HashRef
 
