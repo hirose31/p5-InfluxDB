@@ -21,7 +21,7 @@ use JSON 2;
 enum 'TimePrecision' => qw(s m u);
 
 sub new {
-    my $rule = Data::Validator->new(
+    state $rule = Data::Validator->new(
         host     => { isa => 'Str' },
         port     => { isa => 'Int', default => 8086 },
         username => { isa => 'Str' },
@@ -108,9 +108,10 @@ sub as_hash {
 }
 
 sub switch_database {
-    my($self, $args) = Data::Validator->new(
+    state $rule = Data::Validator->new(
         database => { isa => 'Str' },
-    )->with('Method')->validate(@_);
+    )->with('Method');
+    my($self, $args) = $rule->validate(@_);
 
     $self->{database} = $args->{database};
 
@@ -118,10 +119,11 @@ sub switch_database {
 }
 
 sub switch_user {
-    my($self, $args) = Data::Validator->new(
+    state $rule = Data::Validator->new(
         username => { isa => 'Str' },
         password => { isa => 'Str' },
-    )->with('Method')->validate(@_);
+    )->with('Method');
+    my($self, $args) = $rule->validate(@_);
 
     $self->{username} = $args->{username};
     $self->{password} = $args->{password};
@@ -131,9 +133,10 @@ sub switch_user {
 
 ### database #############################################################
 sub create_database {
-    my($self, $args) = Data::Validator->new(
+    state $rule = Data::Validator->new(
         database => { isa => 'Str' },
-    )->with('Method')->validate(@_);
+    )->with('Method');
+    my($self, $args) = $rule->validate(@_);
 
     my $url = $self->_build_url(
         path => '/db',
@@ -161,9 +164,10 @@ sub list_database {
 }
 
 sub delete_database {
-    my($self, $args) = Data::Validator->new(
+    state $rule = Data::Validator->new(
         database => { isa => 'Str' },
-    )->with('Method')->validate(@_);
+    )->with('Method');
+    my($self, $args) = $rule->validate(@_);
 
     my $url = $self->_build_url(
         path => '/db/'. $args->{database},
@@ -177,10 +181,11 @@ sub delete_database {
 
 ### points ###############################################################
 sub write_points {
-    my($self, $args) = Data::Validator->new(
+    state $rule = Data::Validator->new(
         data           => { isa => 'ArrayRef|HashRef' },
         time_precision => { isa => 'TimePrecision', optional => 1 },
-    )->with('Method')->validate(@_);
+    )->with('Method');
+    my($self, $args) = $rule->validate(@_);
 
     my $data = ref($args->{data}) eq 'ARRAY' ? $args->{data} : [$args->{data}];
     $data = $self->json->encode($data);
@@ -200,9 +205,10 @@ sub write_points {
 }
 
 sub delete_points {
-    my($self, $args) = Data::Validator->new(
+    state $rule = Data::Validator->new(
         name  => { isa => 'Str' },
-    )->with('Method')->validate(@_);
+    )->with('Method');
+    my($self, $args) = $rule->validate(@_);
 
     my $url = $self->_build_url(
        path =>  '/db/' . $self->database . '/series/' . $args->{name},
@@ -219,29 +225,33 @@ sub delete_points {
 
 sub create_scheduled_deletes {
     croak "Not implemented in InfluxDB v0.4.3";
-    # my($self, $args) = Data::Validator->new(
-    # )->with('Method')->validate(@_);
+    # state $rule = Data::Validator->new(
+    # )->with('Method');
+    # my($self, $args) = $rule->validate(@_);
 }
 
 sub list_scheduled_deletes {
     croak "Not implemented in InfluxDB v0.4.3";
-    # my($self, $args) = Data::Validator->new(
-    # )->with('Method')->validate(@_);
+    # state $rule = Data::Validator->new(
+    # )->with('Method');
+    # my($self, $args) = $rule->validate(@_);
 }
 
 sub delete_scheduled_deletes {
     croak "Not implemented in InfluxDB v0.4.3";
-    # my($self, $args) = Data::Validator->new(
-    # )->with('Method')->validate(@_);
+    # state $rule = Data::Validator->new(
+    # )->with('Method');
+    # my($self, $args) = $rule->validate(@_);
 }
 
 sub query {
-    my($self, $args) = Data::Validator->new(
+    state $rule = Data::Validator->new(
         q              => { isa => 'Str' },
         time_precision => { isa => 'TimePrecision', optional => 1 },
         chunked        => { isa => 'Bool', default => 0 },
         # order          => { isa => 'Str', optional => 1 }, # not implemented?
-    )->with('Method')->validate(@_);
+    )->with('Method');
+    my($self, $args) = $rule->validate(@_);
 
     my $url = $self->_build_url(
         path => '/db/' . $self->database . '/series',
@@ -271,10 +281,11 @@ sub query {
 
 ### Continuous Queries ###################################################
 sub create_continuous_query {
-    my($self, $args) = Data::Validator->new(
+    state $rule = Data::Validator->new(
         q    => { isa => 'Str' },
         name => { isa => 'Str' },
-    )->with('Method')->validate(@_);
+    )->with('Method');
+    my($self, $args) = $rule->validate(@_);
 
     return $self->query(q => "$args->{q} into $args->{name}");
 }
@@ -285,9 +296,10 @@ sub list_continuous_queries {
 }
 
 sub drop_continuous_query {
-    my($self, $args) = Data::Validator->new(
+    state $rule = Data::Validator->new(
         id => { isa => 'Str' },
-    )->with('Method')->validate(@_);
+    )->with('Method');
+    my($self, $args) = $rule->validate(@_);
 
     return $self->query(q => "drop continuous query $args->{id}");
 }
@@ -313,10 +325,11 @@ sub drop_continuous_query {
 
 ### utils ################################################################
 sub _build_url {
-    my($self, $args) = Data::Validator->new(
+    state $rule = Data::Validator->new(
         path => { isa => 'Str' },
         qs   => { isa => 'HashRef', optional => 1 },
-    )->with('Method')->validate(@_);
+    )->with('Method');
+    my($self, $args) = $rule->validate(@_);
 
     my $url = sprintf("http://%s:%s@%s:%d%s",
                       $self->username,
