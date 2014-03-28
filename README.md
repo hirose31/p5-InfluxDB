@@ -77,15 +77,7 @@ To install this module, run the following commands:
 
 # DESCRIPTION
 
-InfluxDB is a client library for InfluxDB <[http://influxdb.org](http://influxdb.org)>.
-
-    **************************** CAUTION ****************************
-    
-    InfluxDB that is a time series database is still in development
-    status, so this module is also alpha state. Any API will change
-    without notice.
-    
-    *****************************************************************
+This module \`InfluxDB\` is a client library for InfluxDB <[http://influxdb.org](http://influxdb.org)>.
 
 # METHODS
 
@@ -129,9 +121,12 @@ Write to multiple time series names.
 
     The precision timestamps should come back in. Valid options are s for seconds, m for milliseconds, and u for microseconds.
 
-- __delete\_points__() :Bool
+### __delete\_points__(name => Str) :Bool
 
-### __query__(%args:Hash) :Bool
+Delete ALL DATA from series specified by _name_
+
+### __query__(%args:Hash) :ArrayRef
+
 - q => Str
 
     The InfluxDB query language, see: [http://influxdb.org/docs/query_language/](http://influxdb.org/docs/query_language/)
@@ -169,6 +164,25 @@ Takes result of `query()`(ArrayRef) and convert into following HashRef.
       ]
     }
 
+### __create\_continuous\_query__(q => Str, name => Str) :ArrayRef
+
+Create continuous query.
+
+    $ix->create_continuous_query(
+        q    => "select mean(sys) as sys, mean(usr) as usr from cpu group by time(15m)",
+        name => "cpu.15m",
+    );
+
+### __list\_continuous\_queries__() :ArrayRef
+
+List continuous queries.
+
+### __drop\_continuous\_query__(id => Str) :ArrayRef
+
+Delete continuous query that has specified id.
+
+You can get id of continuous query by list\_continuous\_queries().
+
 ### __switch\_database__(database => Str) :Bool
 
 Switch to another database.
@@ -196,6 +210,10 @@ List database. Requires cluster-admin privileges.
 ### __delete\_database__(database => Str) :Bool
 
 Delete database. Requires cluster-admin privileges.
+
+### __list\_series__() :ArrayRef\[HashRef\]
+
+List series in current database
 
 ### __status__() :HashRef
 

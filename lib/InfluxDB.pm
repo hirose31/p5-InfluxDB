@@ -452,15 +452,7 @@ To install this module, run the following commands:
 
 =head1 DESCRIPTION
 
-InfluxDB is a client library for InfluxDB E<lt>L<http://influxdb.org>E<gt>.
-
-    **************************** CAUTION ****************************
-    
-    InfluxDB that is a time series database is still in development
-    status, so this module is also alpha state. Any API will change
-    without notice.
-    
-    *****************************************************************
+This module `InfluxDB` is a client library for InfluxDB E<lt>L<http://influxdb.org>E<gt>.
 
 =head1 METHODS
 
@@ -518,13 +510,11 @@ The precision timestamps should come back in. Valid options are s for seconds, m
 
 =back
 
-=begin comment
+=head3 B<delete_points>(name => Str) :Bool
 
-=item B<delete_points>() :Bool
+Delete ALL DATA from series specified by I<name>
 
-=end comment
-
-=head3 B<query>(%args:Hash) :Bool
+=head3 B<query>(%args:Hash) :ArrayRef
 
 =over 4
 
@@ -567,6 +557,25 @@ Takes result of C<query()>(ArrayRef) and convert into following HashRef.
       ]
     }
 
+=head3 B<create_continuous_query>(q => Str, name => Str) :ArrayRef
+
+Create continuous query.
+
+    $ix->create_continuous_query(
+        q    => "select mean(sys) as sys, mean(usr) as usr from cpu group by time(15m)",
+        name => "cpu.15m",
+    );
+
+=head3 B<list_continuous_queries>() :ArrayRef
+
+List continuous queries.
+
+=head3 B<drop_continuous_query>(id => Str) :ArrayRef
+
+Delete continuous query that has specified id.
+
+You can get id of continuous query by list_continuous_queries().
+
 =head3 B<switch_database>(database => Str) :Bool
 
 Switch to another database.
@@ -594,6 +603,14 @@ List database. Requires cluster-admin privileges.
 =head3 B<delete_database>(database => Str) :Bool
 
 Delete database. Requires cluster-admin privileges.
+
+=begin comment
+
+=head3 B<list_series>() :ArrayRef[HashRef]
+
+List series in current database
+
+=end comment
 
 =head3 B<status>() :HashRef
 
