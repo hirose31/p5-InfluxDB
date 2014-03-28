@@ -188,10 +188,10 @@ sub delete_database {
 ### series ###############################################################
 ## hmmm v0.5.1 (latest version) returns empty response
 ## https://github.com/FGRibreau/influxdb-cli/issues/8
-# sub list_series {
-#     my $self = shift;
-#     return $self->query(q => "list series");
-# }
+sub list_series {
+    my $self = shift;
+    return $self->query(q => "list series");
+}
 
 ### points ###############################################################
 sub write_points {
@@ -692,13 +692,9 @@ List database. Requires cluster-admin privileges.
 
 Delete database. Requires cluster-admin privileges.
 
-=begin comment
-
 =head3 B<list_series>() :ArrayRef[HashRef]
 
 List series in current database
-
-=end comment
 
 =head3 B<create_database_user>(name => Str, password => Str) :Bool
 
