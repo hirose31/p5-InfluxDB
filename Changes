@@ -2,6 +2,14 @@ Revision history for InfluxDB
 
 {{$NEXT}}
 
+1.000  2014-03-28 21:40:54 JST
+    [IMPROVEMENTS]
+        - Add methods for continuous query
+        - Add methods for database user and cluster admin management
+    [INCOMPATIBLE CHANGES]
+        - Requires Perl >= 5.10
+        - Remove some options from delete_points
+
 0.002  2014-02-10 14:40:32 JST
     [NEW FEATURES]
         - Add "errstr" method

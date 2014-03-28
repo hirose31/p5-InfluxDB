@@ -215,6 +215,46 @@ Delete database. Requires cluster-admin privileges.
 
 List series in current database
 
+### __create\_database\_user__(name => Str, password => Str) :Bool
+
+Create a database user on current database.
+
+### __delete\_database\_user__(name => Str) :Bool
+
+Delete a database user on current database.
+
+### __update\_database\_user__(name => Str \[,password => Str\] \[,admin => Bool\]) :Bool
+
+Update a database user on current database.
+
+### __list\_database\_users__() :ArrayRef
+
+List all database users on current database.
+
+### __show\_database\_user__(name => Str) :HashRef
+
+Show a database user on current database.
+
+### __create\_cluster\_admin__(name => Str, password => Str) :Bool
+
+Create a database user on current database.
+
+### __delete\_cluster\_admin__(name => Str) :Bool
+
+Delete a database user on current database.
+
+### __update\_cluster\_admin__(name => Str, password => Str) :Bool
+
+Update a database user on current database.
+
+### __list\_cluster\_admins__() :ArrayRef
+
+List all database users on current database.
+
+### __show\_cluster\_admin__(name => Str) :HashRef
+
+Show a database user on current database.
+
 ### __status__() :HashRef
 
 Returns status of previous request, as following hash:
