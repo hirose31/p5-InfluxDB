@@ -1,6 +1,6 @@
 # -*- mode: cperl -*-
 
-requires 'perl', '5.008_005';
+requires 'perl', '5.010_000';
 
 requires 'Class::Accessor::Lite';
 requires 'Data::Validator';
@@ -11,7 +11,7 @@ requires 'URI::Escape';
 
 on configure => sub {
     requires 'Module::Build::Tiny', '0.030';
-    requires 'perl', '5.008005';
+    requires 'perl', '5.010_000';
 };
 
 on test => sub {

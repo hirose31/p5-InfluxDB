@@ -1,3 +1,3 @@
-use 5.008_005;
+use 5.010_000;
 use Module::Build::Tiny 0.030;
 Build_PL();

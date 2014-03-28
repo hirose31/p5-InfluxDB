@@ -40,7 +40,7 @@ To install this module, run the following commands:
     my $rs = $ix->query(
         q => 'select * from cpu',
         time_precision => 's',
-    ) or die "query: " . $ix->errstr};
+    ) or die "query: " . $ix->errstr;
     
     # $rs is ArrayRef[HashRef]:
     # [

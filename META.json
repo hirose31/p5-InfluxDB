@@ -27,7 +27,7 @@
       "configure" : {
          "requires" : {
             "Module::Build::Tiny" : "0.030",
-            "perl" : "5.008005"
+            "perl" : "5.010_000"
          }
       },
       "runtime" : {
@@ -38,7 +38,7 @@
             "JSON" : "2",
             "Mouse::Util::TypeConstraints" : "0",
             "URI::Escape" : "0",
-            "perl" : "5.008_005"
+            "perl" : "5.010_000"
          }
       },
       "test" : {

@@ -2,7 +2,7 @@ package InfluxDB;
 
 use strict;
 use warnings;
-use 5.008_005;
+use 5.010_000;
 
 our $VERSION = '0.002';
 
