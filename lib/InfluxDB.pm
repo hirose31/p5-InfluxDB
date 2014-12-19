@@ -8,7 +8,7 @@ our $VERSION = '1.000';
 
 use Class::Accessor::Lite (
     new => 0,
-    ro  => [qw(host port username database json)],
+    ro  => [qw(host port username database ssl json)],
 );
 
 use Carp;
@@ -33,6 +33,7 @@ sub new {
         username => { isa => 'Str' },
         password => { isa => 'Str' },
         database => { isa => 'Str' },
+        ssl      => { isa => 'Bool', default => 0 },
 
         timeout  => { isa => 'Int', default => 120 },
         debug    => { isa => 'Bool', optional => 1 },
@@ -497,7 +498,8 @@ sub _build_url {
     )->with('Method');
     my($self, $args) = $rule->validate(@_);
 
-    my $url = sprintf("http://%s:%s@%s:%d%s",
+    my $url = sprintf("%s://%s:%s@%s:%d%s",
+                      ($self->ssl ? 'https' : 'http'),
                       $self->username,
                       $self->{password},
                       $self->host,
@@ -557,6 +559,7 @@ To install this module, run the following commands:
         username => 'scott',
         password => 'tiger',
         database => 'test',
+        # ssl => 1, # enable SSL/TLS access
     );
     
     $ix->write_points(
