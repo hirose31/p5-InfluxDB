@@ -637,6 +637,8 @@ Creates and returns a new InfluxDB client instance. Dies on errors.
 
 =item database => Str
 
+=item ssl => Bool (optional)
+
 =item timeout => Int (default: 120)
 
 =item debug => Bool (optional)
