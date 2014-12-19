@@ -24,6 +24,7 @@ To install this module, run the following commands:
         username => 'scott',
         password => 'tiger',
         database => 'test',
+        # ssl => 1, # enable SSL/TLS access
     );
     
     $ix->write_points(
