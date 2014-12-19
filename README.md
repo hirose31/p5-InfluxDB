@@ -95,9 +95,9 @@ Creates and returns a new InfluxDB client instance. Dies on errors.
 - username => Str
 - password => Str
 - database => Str
+- ssl => Bool (optional)
 - timeout => Int (default: 120)
 - debug => Bool (optional)
-- ssl => Bool (optional)
 
 ## Instance Methods
 
