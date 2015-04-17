@@ -29,3 +29,5 @@ Str
 chunked
 hostname
 username
+ssl
+graphable

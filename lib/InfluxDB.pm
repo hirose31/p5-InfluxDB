@@ -560,6 +560,7 @@ To install this module, run the following commands:
         password => 'tiger',
         database => 'test',
         # ssl => 1, # enable SSL/TLS access
+        # timeout => 5, # set timeout to 5 seconds
     );
     
     $ix->write_points(

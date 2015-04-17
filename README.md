@@ -1,18 +1,11 @@
-<a href="https://travis-ci.org/hirose31/p5-InfluxDB"><img src="https://travis-ci.org/hirose31/p5-InfluxDB.png?branch=master" alt="Build Status" /></a>
-<a href="https://coveralls.io/r/hirose31/p5-InfluxDB?branch=master"><img src="https://coveralls.io/repos/hirose31/p5-InfluxDB/badge.png?branch=master" alt="Coverage Status" /></a>
+<div>
+    <a href="https://travis-ci.org/hirose31/p5-InfluxDB"><img src="https://travis-ci.org/hirose31/p5-InfluxDB.png?branch=master" alt="Build Status" /></a>
+    <a href="https://coveralls.io/r/hirose31/p5-InfluxDB?branch=master"><img src="https://coveralls.io/repos/hirose31/p5-InfluxDB/badge.png?branch=master" alt="Coverage Status" /></a>
+</div>
 
 # NAME
 
 InfluxDB - Client library for InfluxDB
-
-# INSTALLATION
-
-To install this module, run the following commands:
-
-    perl Build.PL
-    ./Build
-    ./Build test
-    ./Build install
 
 # SYNOPSIS
 
@@ -85,7 +78,7 @@ This module \`InfluxDB\` is a client library for InfluxDB <[http://influxdb.org]
 
 ## Class Methods
 
-### __new__(%args:Hash) :InfluxDB
+### **new**(%args:Hash) :InfluxDB
 
 Creates and returns a new InfluxDB client instance. Dies on errors.
 
@@ -96,12 +89,13 @@ Creates and returns a new InfluxDB client instance. Dies on errors.
 - username => Str
 - password => Str
 - database => Str
+- ssl => Bool (optional)
 - timeout => Int (default: 120)
 - debug => Bool (optional)
 
 ## Instance Methods
 
-### __write\_points__(%args:Hash) :Bool
+### **write\_points**(%args:Hash) :Bool
 
 Write to multiple time series names.
 
@@ -119,19 +113,22 @@ Write to multiple time series names.
             ],
         }
 
+    The `time` and any other data fields which should be graphable must
+    be numbers, not text.  See ["simple scalars" in JSON](https://metacpan.org/pod/JSON#simple-scalars).
+
 - time\_precision => "s" | "m" | "u" (optional)
 
     The precision timestamps should come back in. Valid options are s for seconds, m for milliseconds, and u for microseconds.
 
-### __delete\_points__(name => Str) :Bool
+### **delete\_points**(name => Str) :Bool
 
 Delete ALL DATA from series specified by _name_
 
-### __query__(%args:Hash) :ArrayRef
+### **query**(%args:Hash) :ArrayRef
 
 - q => Str
 
-    The InfluxDB query language, see: [http://influxdb.org/docs/query_language/](http://influxdb.org/docs/query_language/)
+    The InfluxDB query language, see: [http://influxdb.org/docs/query\_language/](http://influxdb.org/docs/query_language/)
 
 - time\_precision => "s" | "m" | "u" (optional)
 
@@ -141,7 +138,7 @@ Delete ALL DATA from series specified by _name_
 
     Chunked response.
 
-### __as\_hash__($result:ArrayRef\[HashRef\]) :HashRef
+### **as\_hash**($result:ArrayRef\[HashRef\]) :HashRef
 
 Utility instance/class method for handling result of query.
 
@@ -166,7 +163,7 @@ Takes result of `query()`(ArrayRef) and convert into following HashRef.
       ]
     }
 
-### __create\_continuous\_query__(q => Str, name => Str) :ArrayRef
+### **create\_continuous\_query**(q => Str, name => Str) :ArrayRef
 
 Create continuous query.
 
@@ -175,29 +172,29 @@ Create continuous query.
         name => "cpu.15m",
     );
 
-### __list\_continuous\_queries__() :ArrayRef
+### **list\_continuous\_queries**() :ArrayRef
 
 List continuous queries.
 
-### __drop\_continuous\_query__(id => Str) :ArrayRef
+### **drop\_continuous\_query**(id => Str) :ArrayRef
 
 Delete continuous query that has specified id.
 
 You can get id of continuous query by list\_continuous\_queries().
 
-### __switch\_database__(database => Str) :Bool
+### **switch\_database**(database => Str) :Bool
 
 Switch to another database.
 
-### __switch\_user__(username => Str, password => Str) :Bool
+### **switch\_user**(username => Str, password => Str) :Bool
 
 Change your user-context.
 
-### __create\_database__(database => Str) :Bool
+### **create\_database**(database => Str) :Bool
 
 Create database. Requires cluster-admin privileges.
 
-### __list\_database__() :ArrayRef\[HashRef\]
+### **list\_database**() :ArrayRef\[HashRef\]
 
 List database. Requires cluster-admin privileges.
 
@@ -209,55 +206,51 @@ List database. Requires cluster-admin privileges.
       ...
     ]
 
-### __delete\_database__(database => Str) :Bool
+### **delete\_database**(database => Str) :Bool
 
 Delete database. Requires cluster-admin privileges.
 
-### __list\_series__() :ArrayRef\[HashRef\]
+### **list\_series**() :ArrayRef\[HashRef\]
 
 List series in current database
 
-### __create\_database\_user__(name => Str, password => Str) :Bool
+### **create\_database\_user**(name => Str, password => Str) :Bool
 
 Create a database user on current database.
 
-### __delete\_database\_user__(name => Str) :Bool
+### **delete\_database\_user**(name => Str) :Bool
 
 Delete a database user on current database.
 
-### __update\_database\_user__(name => Str \[,password => Str\] \[,admin => Bool\]) :Bool
+### **update\_database\_user**(name => Str \[,password => Str\] \[,admin => Bool\]) :Bool
 
 Update a database user on current database.
 
-### __list\_database\_users__() :ArrayRef
+### **list\_database\_users**() :ArrayRef
 
 List all database users on current database.
 
-### __show\_database\_user__(name => Str) :HashRef
+### **show\_database\_user**(name => Str) :HashRef
 
 Show a database user on current database.
 
-### __create\_cluster\_admin__(name => Str, password => Str) :Bool
+### **create\_cluster\_admin**(name => Str, password => Str) :Bool
 
 Create a database user on current database.
 
-### __delete\_cluster\_admin__(name => Str) :Bool
+### **delete\_cluster\_admin**(name => Str) :Bool
 
 Delete a database user on current database.
 
-### __update\_cluster\_admin__(name => Str, password => Str) :Bool
+### **update\_cluster\_admin**(name => Str, password => Str) :Bool
 
 Update a database user on current database.
 
-### __list\_cluster\_admins__() :ArrayRef
+### **list\_cluster\_admins**() :ArrayRef
 
 List all database users on current database.
 
-### __show\_cluster\_admin__(name => Str) :HashRef
-
-Show a database user on current database.
-
-### __status__() :HashRef
+### **status**() :HashRef
 
 Returns status of previous request, as following hash:
 
@@ -277,23 +270,23 @@ Returns status of previous request, as following hash:
 
     Response body.
 
-### __errstr__() :Str
+### **errstr**() :Str
 
 Returns error message if previous query was failed.
 
-### __host__() :Str
+### **host**() :Str
 
 Returns hostname of InfluxDB server.
 
-### __port__() :Str
+### **port**() :Str
 
 Returns port number of InfluxDB server.
 
-### __username__() :Str
+### **username**() :Str
 
 Returns current user name.
 
-### __database__() :Str
+### **database**() :Str
 
 Returns current database name.
 

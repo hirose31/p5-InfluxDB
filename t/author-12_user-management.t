@@ -58,13 +58,13 @@ subtest 'dataabse user' => sub {
     subtest 'update' => sub {
         ok($r = $ix->show_database_user(name => $name));
         is($r->{name}, $name);
-        is($r->{isAdmin}, "false");
+        is($r->{isAdmin}, 0);
 
         $r = $ix->update_database_user(name => $name, admin => 1);
 
         ok($r = $ix->show_database_user(name => $name));
         is($r->{name}, $name);
-        is($r->{isAdmin}, "true");
+        is($r->{isAdmin}, 1);
     };
 
     subtest 'delete' => sub {
