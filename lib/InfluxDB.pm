@@ -667,6 +667,9 @@ HashRef like following:
         ],
     }
 
+The C<time> and any other data fields which should be graphable must
+be numbers, not text.  See L<JSON/simple scalars>.
+
 =item time_precision => "s" | "m" | "u" (optional)
 
 The precision timestamps should come back in. Valid options are s for seconds, m for milliseconds, and u for microseconds.
