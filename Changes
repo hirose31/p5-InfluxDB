@@ -2,6 +2,10 @@ Revision history for InfluxDB
 
 {{$NEXT}}
 
+1.003  2015-05-08 16:05:58 JST
+    [BUG FIXES]
+        - Fix cannot call constructor twice #5
+
 1.002  2015-04-17 13:35:32 JST
     [DOCUMENTATION]
         - Improve documents

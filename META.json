@@ -68,7 +68,7 @@
          "web" : "https://github.com/hirose31/p5-InfluxDB"
       }
    },
-   "version" : "1.002",
+   "version" : "1.003",
    "x_contributors" : [
       "Matthew Astley <mca@sanger.ac.uk>",
       "Will Bradley <zyphlar@users.noreply.github.com>"
