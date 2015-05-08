@@ -37,11 +37,9 @@ sub new {
 
         timeout  => { isa => 'Int', default => 120 },
         debug    => { isa => 'Bool', optional => 1 },
-    );
+    )->with('NoRestricted')->with('Method');
     # Mouse::Util::apply_all_role leaks memory when takes 2 or more extensions.
     # so apply for each extension.
-    $rule->with('NoRestricted');
-    $rule->with('Method');
     my($class, $args) = $rule->validate(@_);
 
     if (delete $args->{debug}) {
