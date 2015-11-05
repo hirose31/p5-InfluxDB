@@ -2,6 +2,10 @@ Revision history for InfluxDB
 
 {{$NEXT}}
 
+1.004  2015-11-05 20:20:26 JST
+    [DOCUMENTATION]
+        - refer to InfluxDB::LineProtocol
+
 1.003  2015-05-08 16:05:58 JST
     [BUG FIXES]
         - Fix cannot call constructor twice #5
