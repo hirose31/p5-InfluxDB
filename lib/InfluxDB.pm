@@ -547,6 +547,18 @@ To install this module, run the following commands:
 
 =end readme
 
+=head1 CAUTION
+
+    The JSON write protocol is deprecated as of InfluxDB 0.9.1. It is
+    still present but it will be removed when InfluxDB 1.0 is
+    released. The line protocol is the primary write protocol for
+    InfluxDB 0.9.1+.
+
+This InfluxDB module can handle only JSON protocol.
+
+If you want to use line protocol, please use L<InfluxDB::LineProtocol> module.
+
+
 =head1 SYNOPSIS
 
     use InfluxDB;
