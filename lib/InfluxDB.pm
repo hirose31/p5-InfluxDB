@@ -30,8 +30,8 @@ sub new {
     state $rule = Data::Validator->new(
         host     => { isa => 'Str' },
         port     => { isa => 'Int', default => 8086 },
-        username => { isa => 'Str' },
-        password => { isa => 'Str' },
+        username => { isa => 'Str', optional => 1 },
+        password => { isa => 'Str', optional => 1 },
         database => { isa => 'Str' },
         ssl      => { isa => 'Bool', default => 0 },
 
@@ -496,10 +496,11 @@ sub _build_url {
     )->with('Method');
     my($self, $args) = $rule->validate(@_);
 
-    my $url = sprintf("%s://%s:%s@%s:%d%s",
+    my $url = sprintf("%s://%s%s:%d%s",
                       ($self->ssl ? 'https' : 'http'),
-                      $self->username,
-                      $self->{password},
+                      ($self->username and $self->{password})
+                          ? sprintf("%s\@%s:", $self->username, $self->{password})
+                          : '',
                       $self->host,
                       $self->port,
                       $args->{path},
