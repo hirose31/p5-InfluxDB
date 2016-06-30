@@ -499,7 +499,7 @@ sub _build_url {
     my $url = sprintf("%s://%s%s:%d%s",
                       ($self->ssl ? 'https' : 'http'),
                       ($self->username and $self->{password})
-                          ? sprintf("%s\@%s:", $self->username, $self->{password})
+                          ? sprintf('%s:%s@', $self->username, $self->{password})
                           : '',
                       $self->host,
                       $self->port,

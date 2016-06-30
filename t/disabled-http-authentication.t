@@ -19,7 +19,7 @@ my $obj = new_ok("InfluxDB" => [
     );
     my $url = $obj->_build_url(path => '');
 
-    is($url, 'http://user@pwd:a.dummy.influxdb.host:8086', 'URL correctly formatted when user & pwd are set');
+    is($url, 'http://user:pwd@a.dummy.influxdb.host:8086', 'URL correctly formatted when user & pwd are set');
 };
 
 {
