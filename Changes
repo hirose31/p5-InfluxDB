@@ -2,6 +2,12 @@ Revision history for InfluxDB
 
 {{$NEXT}}
 
+1.005  2016-06-30 12:55:08 JST
+    [IMPROVEMENTS]
+        - Provide support for disabled HTTP authentication #7
+    [DOCUMENTATION]
+        - Add SSL to readme as well #2
+
 1.004  2015-11-05 20:20:26 JST
     [DOCUMENTATION]
         - refer to InfluxDB::LineProtocol

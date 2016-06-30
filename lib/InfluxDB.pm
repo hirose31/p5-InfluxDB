@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use 5.010_000;
 
-our $VERSION = '1.004';
+our $VERSION = '1.005';
 
 use Class::Accessor::Lite (
     new => 0,
